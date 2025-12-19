@@ -46,20 +46,23 @@ function M.setup(opts)
 
   -- Check if processing is available
   if vim.fn.executable(M.config.processing_path) ~= 1 then
-    vim.notify("Processing binary not found. Please install Processing or set the correct path.", vim.log.levels.ERROR)
+    vim.notify(
+      "Processing binary not found. Please install Processing or set the correct path.",
+      vim.log.levels.ERROR
+    )
     return
   end
 
   -- Register filetype detection
   if M.config.auto_commands then
-    vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+    vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
       pattern = "*.pde",
       callback = function()
         vim.bo.filetype = "processing"
         -- Optionally force a specific parser if different from the filetype
         vim.cmd("TSBufEnable highlight")
-        vim.treesitter.start(0, "java")  -- Use the Java parser for this buffer
-      end
+        vim.cmd("set filetype=java")
+      end,
     })
   end
 
